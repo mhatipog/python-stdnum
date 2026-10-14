@@ -141,7 +141,7 @@ def _get_birth_date_parts(number: str) -> tuple[int | None, int | None, int | No
 def validate(number: str) -> str:
     """Check if the number is a valid National Number."""
     number = compact(number)
-    if not isdigits(number) or int(number) <= 0:
+    if not isdigits(number) or not number.strip('0'):
         raise InvalidFormat()
     if len(number) != 11:
         raise InvalidLength()

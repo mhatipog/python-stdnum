@@ -1,0 +1,32 @@
+test_be_overlong.doctest - oversized input tests for Belgian validators
+
+Copyright (C) 2026 Metin Hatipogullari
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation; either
+version 2.1 of the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public
+License along with this library; if not, see <https://www.gnu.org/licenses/>.
+
+
+>>> from stdnum.be import bis, nn, ogm_vcs, vat
+>>> from stdnum.exceptions import ValidationError
+>>> modules = (bis, nn, ogm_vcs, vat)
+>>> def error_name(module, number):
+...     try:
+...         module.validate(number)
+...     except ValidationError as exc:
+...         return type(exc).__name__
+>>> [error_name(mod, '9' * 5000) for mod in modules]
+['InvalidLength', 'InvalidLength', 'InvalidLength', 'InvalidLength']
+>>> [error_name(mod, '0' * 5000) for mod in modules]
+['InvalidFormat', 'InvalidFormat', 'InvalidFormat', 'InvalidFormat']
+>>> all(not mod.is_valid('9' * 5000) for mod in modules)
+True
